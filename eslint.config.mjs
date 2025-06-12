@@ -21,7 +21,8 @@ export default defineConfig([
       globals: {
         ...globals.browser,
         ...globals.node,
-        ...types
+        ...types,
+        getNode:true
       },
     },
     rules: {
