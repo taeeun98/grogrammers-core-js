@@ -32,7 +32,7 @@
 const about = getNode('.about');
 
 // 1. about에 class 속성이 있는지 확인
-const hasAttribute = about.hasAttribut('class')
+const hasAttribute = about.hasAttribute('class')
 
 // 2. about의 class 값을 가져와주세요.
 const getAttribute = about.getAttribute('class')
@@ -68,3 +68,46 @@ for(const a of about.attributes){
 // data-* 속성을 사용하면 읽기 쉽고, 수정도 손쉽습니다.
 
 // - elementNode.dataset
+
+function getAttr(node, property) {
+    if(isString(node)) node = getNode(node);
+    console.log(!isString(property));
+    
+    if(!isString(property)) throw new TypeError('getter 함수에 전달된 두번째 인수는 문자타입이어야 합니다.')
+        
+    return node.getAttribute(property)
+}
+
+getAttr('.first', 'class');
+
+
+setAttr('.first', 'id', 'hello');
+
+function setAttr(node, prop, value){
+    if(isString(node)) node = getNode(node);
+    if(!isString(prop)) throw new TypeError('setAttr 함수에 전달된 두 번째 인수는 문자 타입 이어야 합니다.');
+    
+    if(value === '') {
+        node.removeAttribute(prop);
+        return;
+    }
+
+    if(isUndefined(value) || isNull(value)) throw new Error('...');
+
+    node.setAttribute(prop, value);
+}
+
+
+function attr(node, prop, value) {
+    if(isUndefined(value)) {
+        return getAttr(node, prop);
+    } else {
+        setAttr(node, prop, value);
+    }
+}
+
+attr('.first', 'class', 'hello');
+attr('.first', 'class');
+
+const _attr = (node, prop, value) => 
+    isUndefined(value) ? getAttr(node, prop) : setAttr(node, prop, value);

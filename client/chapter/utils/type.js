@@ -1,8 +1,7 @@
 
 
 
-const typeOf = data => Object.prototype.toString.call(data).slice(8,-1).toLowerCase() === 'object';
-
+const typeOf = data => Object.prototype.toString.call(data).slice(8,-1).toLowerCase();
 
 const isObject = data => typeOf(data) === 'object';
 const isArray = data => typeOf(data) === 'array';
