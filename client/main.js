@@ -1,68 +1,97 @@
+import {
+  copy,
+  shake,
+  addClass,
+  getRandom,
+  showAlert,
+  insertLast,
+  removeClass,
+  getNode as $,
+  clearContents,
+  isNumericString,
+} from './lib/index.js';
+
+import data from './data/data.js';
+
 /* 
-1. input 선택하기
-    - getNode or querySelector
 
-2. input 이벤트 바인딩
-    - addEventListener('input') 
+[phase-1]
 
-3. input의 value 값 가져오기
+1. 주접 떨기 버튼을 클릭하는 함수
+    - 주접 떨기 버튼 가져오기
+    - 이벤트 연결 'click'
+
+2. input 값 가져오기 
     - input.value
 
-4. 숫자값 더하기
-    - value1 + value2
+3. data 함수에서 주접 이름 넣고 꺼내기 => [] 리턴값 확인
+    - n번째 주접 랜덤 pick 하기 
 
-5. result에 출력하기 
-    - insertLast or insertAdjacentHTML
+4. result에 렌더링 하기
+    - insertLast 
 
-6. clear 클릭시 모든 값 초기화
+[phase-2]
+5. 예외 처리
+    - 이름이 없을 경우 에러
+    - 숫자만 들어오면 에러
+
 */
 
-
-// import { getNode } from "./lib/dom/getNode.js";
-// import { clearContents } from './lib/dom/clearContents.js'
-// import { insertLast } from './lib/dom/insert.js'
-// * 로 불러오는건 위험할수도 있음, 모듈에서는 필요한 것만 가져오자.가 원칙이라
-// 하나씩 불러오는 것을 더 많이 사용
-import {
-    // getNode as $, // 별칭 지정 
-    getNode,
-    clearContents,
-    insertLast
-} from "./lib/index.js";
+const submit = $('#submit');
+const nameField = $('#nameField');
+const result = $('.result');
 
 
-const first = getNode('#firstNumber');
-const second = getNode('#secondNumber');
-const result = getNode('.result');
-const clear = getNode('#clear');
-
-
-
-function handleInput(){
-  const firstValue = +first.value;
-  const secondValue = Number(second.value);
-  const total = firstValue + secondValue;
-
-
-  // result.textContent = '';
-  clearContents(result)
-
-  insertLast(result,total);
-  
-}
-
-function handleClear(e){
+function handleSubmit(e) {
   e.preventDefault();
 
-  // first.value = ''
-  // second.value = ''
-  clearContents(first)
-  clearContents(second)
+  const name = nameField.value;
+  const list = data(name);
+  const pick = list[getRandom(list.length)];
 
-  result.textContent = '-'
-  first.focus()
+
+  if(!name || name.replaceAll(' ','') === ''){
+
+    showAlert({
+      target:'.alert-error',
+      message:'공백은 허용되지 않습니다.',
+      timeout:2000,
+      className:'is-active'
+    })
+
+    shake(nameField)
+    return;
+  }
+
+  if(!isNumericString(name)){
+    showAlert({
+      target:'.alert-error',
+      message:'정확한 이름을 입력해 주세요.',
+      timeout:2000,
+      className:'is-active'
+    })
+
+    shake(nameField)
+    return;
+  }
+
+  clearContents(result);
+  insertLast(result, pick);
 }
 
-first.addEventListener('input',handleInput);
-second.addEventListener('input',handleInput);
-clear.addEventListener('click',handleClear);
+function handleCopyClipboard() {
+  const text = this.textContent;
+
+  copy(text)
+    .then(() => {
+      showAlert({
+        target: '.alert-success',
+        className: 'is-active',
+        message: '클립보드 복사 완료!!',
+        timeout: 2000,
+      });
+    });
+}
+
+submit.addEventListener('click', handleSubmit);
+result.addEventListener('click', handleCopyClipboard);
