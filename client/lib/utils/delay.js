@@ -1,5 +1,7 @@
 import { getNode } from '../dom/getNode.js';
+import { xhrPromise } from './xhr.js';
 import { isObject, isNumber } from './type.js'
+import { insertLast } from '../dom/insert.js'
 
 // callback
 
@@ -48,7 +50,7 @@ const defaultOptions = {
   errorMessage:'warn'
 }
 
-function delayP(time,options){
+export function delayP(options){
 
   // const config = {...defaultOptions,...options};
   let config = {...defaultOptions}
@@ -78,36 +80,86 @@ function delayP(time,options){
   })
 }
 
-delayP({
-  data:'....'
-})
+// delayP({
+//   data:'....'
+// })
 
 
 
 // const data = delayP();
 
 
-delayP()
-.then(()=>{
+// delayP()
+// .then(()=>{
     
-  first.style.top = '-100px';
-  second.style.top = '100px';
+//   first.style.top = '-100px';
+//   second.style.top = '100px';
   
-  return delayP()
-})
+//   return delayP()
+// })
 
-
-
-.then((res)=>{
+// .then((res)=>{
   
-  first.style.transform = 'rotate(360deg)';
-  second.style.transform = 'rotate(-360deg)';
+//   first.style.transform = 'rotate(360deg)';
+//   second.style.transform = 'rotate(-360deg)';
 
-  return delayP();
-})
-.then(()=>{
+//   return delayP();
+// })
+// .then(()=>{
 
-  first.style.top = 0;
-  second.style.top = 0;
+//   first.style.top = 0;
+//   second.style.top = 0;
   
-})
+// })
+
+
+
+//async await
+// async : 무조건 promise object를 리턴하는 함수
+// await : 코드 실행 흐름 제어
+//         result의 값을 꺼낼 수 있다.
+async function f() {
+  return 10;
+}
+
+// 현재는 탑레벨 await 사용가능
+const a = await f();
+// console.log(a);
+
+// IIAFE 예전엔 이렇게 했음
+(async () => {
+
+  const a = await f();
+
+})();
+
+
+
+
+// await 은 promise 함수를 리턴하는 함수가 있다면, 어디서든 쓸수있음
+// 꼭 async 가 아니어도 됨
+function delayA() {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve('성공');
+    }, 2000);
+  });
+}
+
+const result = await delayA();
+
+// console.log(result);
+
+
+
+
+async function getData() {
+  const data = await xhrPromise.get('https://pokeapi.co/api/v2/pokemon/10');
+
+  const src = data.sprites.other.showdown['front_default'];
+
+  insertLast(document.body, `<img src="${src}" alt="" />`)
+
+}
+
+getData();
