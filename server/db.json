@@ -1,5 +1,11 @@
 {
-  "users": [],
+  "users": [
+    {
+      "email": "tiger@gmail.com",
+      "password": "$2a$10$MSftNO2..MtwhB/pl6o.o.H93RqjfMi6Kaz.BArc71.E4SRGnYrki",
+      "id": 1
+    }
+  ],
   "posts": [
     {
       "id": "7",
@@ -104,6 +110,12 @@
       "username": "태은",
       "email": "dfd",
       "website": "dd"
+    },
+    {
+      "name": "태은",
+      "email": "dd@mail.com",
+      "website": "www.ddd.com",
+      "id": "D1PWaLF"
     }
   ]
 }

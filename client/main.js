@@ -153,7 +153,7 @@ registerDoneButton.addEventListener('click',handleRegisterCreate);
 
 
 
-
+// 회원가입 안돼있으면 로그인 코드 실행안됨 . 주석처리하고 회원가입 해야함
 const isLogin = await tiger.post('http://localhost:3000/login',{
   email:'tiger@gmail.com',
   password:'123123'
